@@ -7,3 +7,4 @@ pillow
 psycopg2-binary
 whitenoise
 django-rest-framework
+django-cors-headers
