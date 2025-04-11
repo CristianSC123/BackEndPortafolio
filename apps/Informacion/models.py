@@ -1,6 +1,5 @@
 from django.db import models
 import uuid
-from apps.Analisis.views import generar_embedding
 
 class Informacion(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -20,21 +19,6 @@ class Informacion(models.Model):
         verbose_name = "Información personal"
         verbose_name_plural = "Informaciones personales"
         ordering = ['-created_at']
-
-    def save(self, *args, **kwargs):
-        if not self.embedding or any([
-            self.has_changed('full_name'),
-            self.has_changed('email'),
-            self.has_changed('phone'),
-            self.has_changed('specialty')
-        ]):
-            texto = f"""
-            Nombre: {self.full_name}
-            Especialidad: {self.specialty}
-            Contacto: {self.email} | {self.phone}
-            """
-            self.embedding = generar_embedding(texto)
-        super().save(*args, **kwargs)
 
     def has_changed(self, field):
         if not self.pk or not self.__class__.objects.filter(pk=self.pk).exists():
